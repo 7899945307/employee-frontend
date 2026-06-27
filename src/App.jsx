@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:4000'
+const apiBaseUrl =
+  import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? 'http://localhost:4000' : '')
 
 function App() {
   const [employees, setEmployees] = useState([])
@@ -15,32 +16,28 @@ function App() {
       try {
         setLoading(true)
         setError('')
-        // #region debug-point B:fetch-start
-        fetch('http://127.0.0.1:7777/event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sessionId: 'ui-not-working', runId: 'pre-fix', hypothesisId: 'B', location: 'frontend/src/App.jsx:loadEmployees:start', msg: '[DEBUG] employee fetch starting', data: { apiBaseUrl }, ts: Date.now() }) }).catch(() => {})
-        // #endregion
+
+        if (!apiBaseUrl) {
+          throw new Error('Missing VITE_API_BASE_URL')
+        }
 
         const response = await fetch(`${apiBaseUrl}/api/employees`, {
           signal: controller.signal,
         })
-        // #region debug-point C:fetch-response
-        fetch('http://127.0.0.1:7777/event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sessionId: 'ui-not-working', runId: 'pre-fix', hypothesisId: 'C', location: 'frontend/src/App.jsx:loadEmployees:response', msg: '[DEBUG] employee fetch response received', data: { ok: response.ok, status: response.status, statusText: response.statusText }, ts: Date.now() }) }).catch(() => {})
-        // #endregion
 
         if (!response.ok) {
           throw new Error('Failed to load employee data.')
         }
 
         const data = await response.json()
-        // #region debug-point D:fetch-success
-        fetch('http://127.0.0.1:7777/event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sessionId: 'ui-not-working', runId: 'pre-fix', hypothesisId: 'D', location: 'frontend/src/App.jsx:loadEmployees:success', msg: '[DEBUG] employee fetch parsed successfully', data: { count: Array.isArray(data) ? data.length : -1 }, ts: Date.now() }) }).catch(() => {})
-        // #endregion
         setEmployees(data)
       } catch (err) {
         if (err.name !== 'AbortError') {
-          // #region debug-point E:fetch-error
-          fetch('http://127.0.0.1:7777/event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sessionId: 'ui-not-working', runId: 'pre-fix', hypothesisId: 'E', location: 'frontend/src/App.jsx:loadEmployees:catch', msg: '[DEBUG] employee fetch failed', data: { name: err.name, message: err.message }, ts: Date.now() }) }).catch(() => {})
-          // #endregion
-          setError('Unable to fetch employees from the backend.')
+          setError(
+            err.message === 'Missing VITE_API_BASE_URL'
+              ? 'Set VITE_API_BASE_URL to your deployed backend URL.'
+              : 'Unable to fetch employees from the backend.',
+          )
         }
       } finally {
         setLoading(false)
