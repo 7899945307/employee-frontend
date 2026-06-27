@@ -1,0 +1,90 @@
+.app-shell {
+  padding: 72px 32px;
+  text-align: left;
+}
+
+.hero-section {
+  margin-bottom: 32px;
+}
+
+.eyebrow {
+  margin-bottom: 12px;
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-copy {
+  max-width: 720px;
+  color: var(--text);
+}
+
+.status-message {
+  margin: 24px 0;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  color: var(--text-h);
+}
+
+.error-message {
+  border-color: rgba(220, 38, 38, 0.3);
+  color: #dc2626;
+}
+
+.employee-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.employee-card {
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.card-header {
+  margin-bottom: 20px;
+}
+
+.card-header h2 {
+  margin-bottom: 6px;
+}
+
+.card-header span {
+  color: var(--text);
+}
+
+.employee-details {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+}
+
+.employee-details div {
+  display: grid;
+  gap: 4px;
+}
+
+.employee-details dt {
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.employee-details dd {
+  margin: 0;
+  color: var(--text-h);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    padding: 48px 20px;
+  }
+}
