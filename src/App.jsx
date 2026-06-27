@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
-const apiBaseUrl =
-  import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? 'http://localhost:4000' : '')
+const apiBaseUrl = import.meta.env.DEV
+  ? import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:4000'
+  : import.meta.env.VITE_API_BASE_URL ?? ''
 
 function App() {
   const [employees, setEmployees] = useState([])
@@ -16,11 +17,6 @@ function App() {
       try {
         setLoading(true)
         setError('')
-
-        if (!apiBaseUrl) {
-          throw new Error('Missing VITE_API_BASE_URL')
-        }
-
         const response = await fetch(`${apiBaseUrl}/api/employees`, {
           signal: controller.signal,
         })
@@ -33,11 +29,7 @@ function App() {
         setEmployees(data)
       } catch (err) {
         if (err.name !== 'AbortError') {
-          setError(
-            err.message === 'Missing VITE_API_BASE_URL'
-              ? 'Set VITE_API_BASE_URL to your deployed backend URL.'
-              : 'Unable to fetch employees from the backend.',
-          )
+          setError('Unable to fetch employees from the backend.')
         }
       } finally {
         setLoading(false)

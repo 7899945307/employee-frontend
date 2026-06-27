@@ -9,8 +9,12 @@ npm install
 npm run dev
 ```
 
-The frontend calls the backend API at `http://localhost:4000` by default.
-You can change that with `VITE_API_BASE_URL`.
+The frontend uses:
+
+- local development: `http://localhost:4000`
+- production: same-origin `/api` by default
+
+If you want the frontend to call a backend domain directly instead of using a proxy or Worker, set `VITE_API_BASE_URL`.
 
 ## API used
 
